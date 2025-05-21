@@ -24,9 +24,8 @@ FROM ckan/ckan-dev:2.11
 USER root
 
 ### Scheming ###
-RUN pip3 install -e 'git+https://github.com/ckan/ckanext-scheming.git@master#egg=ckanext-scheming'
+RUN  pip3 install -e 'git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview'
 
-COPY ./ckan_dataset_schema.yaml ${APP_DIR}/src/ckanext-scheming/ckanext/scheming
 
 ### Pages ###
 #RUN  pip3 install -e git+https://github.com/ckan/ckanext-pages.git#egg=ckanext-pages

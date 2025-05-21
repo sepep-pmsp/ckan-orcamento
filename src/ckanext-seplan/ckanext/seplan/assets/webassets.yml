@@ -1,0 +1,14 @@
+# seplan-js:
+#   filter: rjsmin
+#   output: ckanext-seplan/%(version)s-seplan.js
+#   contents:
+#     - js/seplan.js
+#   extra:
+#     preload:
+#       - base/main
+
+# seplan-css:
+#   filter: cssrewrite
+#   output: ckanext-seplan/%(version)s-seplan.css
+#   contents:
+#     - css/seplan.css

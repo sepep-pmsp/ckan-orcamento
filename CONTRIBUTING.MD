@@ -1,4 +1,4 @@
-# Contributing - Customização da UI do CKAN
+# Customização da UI do CKAN
 
 Este guia explica como contribuir com customizações na interface do usuário (UI) do CKAN utilizando a extensão `ckanext-seplan` em ambiente de desenvolvimento.
 
@@ -30,8 +30,8 @@ cd ckan-orcamento
 # Copie o arquivo de configuração de desenvolvimento
 cp .env.example .env
 
-# Edite o arquivo .env para incluir a extensão seplan
 ```
+> Atenção:  O arquivo .env.example contém as configurações necessárias para rodar o ckan em modo desenvolvimento. Basta copiar o conteúdo para o .env, buildar as imagens e construir a rede de containers. 
 
 ### 3. Build das Imagens de Desenvolvimento
 

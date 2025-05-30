@@ -2,8 +2,8 @@
    The "account masthead" bar across the top of the site
    ===================================================== */
 
-   .account-masthead {
-    background-color: rgb(40, 40, 40);
+.account-masthead {
+background-color: rgb(236, 102, 8);
 }
 /* The "bubble" containing the number of new notifications. */
 .account-masthead .account .notifications a span {
@@ -26,7 +26,7 @@
    ======================================================================== */
 
 .masthead {
-  background-color: #3d3d3d;
+  background-color: white;
 }
 /* The "navigation pills" in the masthead (the links to Datasets,
    Organizations, etc) when the user's pointer hovers over them. */
@@ -46,11 +46,75 @@
   box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
 }
 
+/* The "main navigation bar" in the masthead, which contains the links to
+   Datasets, Organizations, etc. */
+.masthead .main-navbar ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #030303;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  }
 
+.masthead .main-navbar ul li a:hover {
+    color: rgb(236, 102, 8) !important;
+    background-color: transparent !important;
+    /* Seus estilos customizados aqui */
+}
+
+.search-form .search-input button i {
+  color: rgb(236, 102, 8);
+  transition: color 0.2s ease-in;
+}
+
+/* Remove background de todos os elementos da homepage */
+.homepage,
+.homepage div[role="main"],
+.homepage .main.hero,
+.homepage .main.hero .container,
+.homepage .container,
+.homepage .row,
+.homepage .col-md-6,
+.homepage .module-promotion,
+.homepage .module-search,
+.homepage .card,
+.homepage .box {
+    background: white !important;
+    background-image: none !important;
+}
+
+
+/* Estilos para o card de promoção */
+.module-promotion.card.box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 24px;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #f0f0f0; /* Borda mais visível */
+  background: #ffffff;
+}
+
+.module-content.search-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 24px;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #f0f0f0; /* Borda mais visível */
+  background: #ffffff;
+}
 /* ===========================================
    The content in the middle of the front page
    =========================================== */
 
+   
+   
 /* Remove the "box shadow" effect around various boxes on the page. */
 .box {
   box-shadow: none;
@@ -82,6 +146,15 @@
   border-top: 1px solid rgb(204, 204, 204);
 }
 
+/* ====================================
+   The searh box on the front page
+   ==================================== */
+
+
+/* Change the background color of the "Popular Tags" box. */
+.homepage .module-search .tags {
+  background-color: rgb(236, 102, 8);
+}
 
 /* ====================================
    The footer at the bottom of the site
@@ -89,7 +162,7 @@
 
 .site-footer,
 body {
-  background-color: rgb(40, 40, 40);
+  background-color: #404040;
 }
 /* The text in the footer. */
 .site-footer,

@@ -1,4 +1,4 @@
-name: Build CKAN Docker 
+name: Build and Push Ckan Docker Images
 
 on:
   workflow_dispatch:

@@ -10,8 +10,6 @@ on:
       - feat/continous-deploy
 
 
-
-
 jobs: 
   build:  
     runs-on: ubuntu-latest
@@ -35,7 +33,7 @@ jobs:
        with:
           context: ./nginx
           file: ./nginx/Dockerfile
-          push: false
+          push: true
           tags: folhesgabriel/ckan-docker-nginx:latest
 
     -  name: PostgreSQL build and push to Docker Hub
@@ -43,7 +41,7 @@ jobs:
        with:
           context: ./postgresql
           file: ./postgresql/Dockerfile
-          push: false
+          push: true
           tags: folhesgabriel/ckan-docker-postgresql:latest
 
     -  name: CKAN build and push to Docker Hub
@@ -51,6 +49,6 @@ jobs:
        with:
           context: ./ckan
           file: ./ckan/Dockerfile
-          push: false
+          push: true
           tags: folhesgabriel/ckan-docker-ckan:latest
       

@@ -1,6 +1,7 @@
 name: Build CKAN Docker 
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -8,9 +9,6 @@ on:
     branches:
       - feat/continous-deploy
 
-
-
-      
 
 jobs: 
   build:  

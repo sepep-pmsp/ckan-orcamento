@@ -1,9 +1,12 @@
+
+
 /* =====================================================
    The "account masthead" bar across the top of the site
    ===================================================== */
 
 .account-masthead {
 background-color: rgb(236, 102, 8);
+color: #fff;
 }
 /* The "bubble" containing the number of new notifications. */
 .account-masthead .account .notifications a span {
@@ -11,8 +14,12 @@ background-color: rgb(236, 102, 8);
 }
 /* The text and icons in the user account info. */
 .account-masthead .account ul li a {
-  color: rgba(255, 255, 255, 0.6);
+  color: white;
+  font-weight: bold;
 }
+
+
+
 /* The user account info text and icons, when the user's pointer is hovering
    over them. */
 .account-masthead .account ul li a:hover {
@@ -20,14 +27,43 @@ background-color: rgb(236, 102, 8);
   background-color: black;
 }
 
+[role=main],
+.main {
+  position: relative;
+}
 
+.main {
+  padding: 20px 0;
+  background: #ffffff; /* or just 'white' */
+}
+
+
+.toolbar .breadcrumb a {
+  color: rgb(236, 102, 8);
+}
 /* ========================================================================
    The main masthead bar that contains the site logo, nav links, and search
    ======================================================================== */
 
 .masthead {
   background-color: white;
+  background:white;
+  border-bottom: 2.5px solid #ddd; 
 }
+
+
+.media-grid, .module-grid {
+  margin: 0;
+  list-style: none;
+  padding-left: 0px;
+  min-height: 205px;
+  padding-top: 0.75rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-width: 1px 0;
+}
+
+
 /* The "navigation pills" in the masthead (the links to Datasets,
    Organizations, etc) when the user's pointer hovers over them. */
 .masthead .navigation .nav-pills li a:hover {
@@ -52,6 +88,7 @@ background-color: rgb(236, 102, 8);
     display: block;
     padding: 0.5rem 1rem;
     color: #030303;
+    font-weight: bold;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
   }
 
@@ -59,6 +96,12 @@ background-color: rgb(236, 102, 8);
     color: rgb(236, 102, 8) !important;
     background-color: transparent !important;
     /* Seus estilos customizados aqui */
+}
+
+.masthead .main-navbar ul li:hover a, .masthead .main-navbar ul li:focus a, .masthead .main-navbar ul li.active a {
+  border-radius: 0.3rem;
+  background-color: rgb(236, 102, 8);
+  color: white;
 }
 
 .search-form .search-input button i {
@@ -163,6 +206,7 @@ background-color: rgb(236, 102, 8);
 .site-footer,
 body {
   background-color: #404040;
+  background: #404040;
 }
 /* The text in the footer. */
 .site-footer,
@@ -176,7 +220,15 @@ body {
 }
 
 
-.logo img {
-  max-height: 80px; /* Adjust height */
-  max-width: auto;  /* Maintain aspect ratio */
+.masthead .navbar .logo img {
+  max-height: 100px !important; /* Aumenta de 60px para 100px */
+  max-width: 100%;
+  transition: height 0.3s;
+  height: 80px; /* Tamanho base maior */
+}
+
+@media (min-width: 768px) {
+  .masthead .navbar .logo img {
+    height: 120px; /* Tamanho desktop */
+  }
 }

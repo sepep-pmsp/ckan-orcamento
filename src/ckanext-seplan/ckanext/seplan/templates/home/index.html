@@ -16,20 +16,14 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            {% block promoted %}
             {% snippet 'home/snippets/promoted.html' %}
-            {% endblock %}
           </div>
          
           <div class="col-md-6">
-            {% block search %}
             {% snippet 'home/snippets/search.html', search_facets=search_facets %}
-            {% endblock %}
             
             <div style="margin-top: 30px;">
-              {% block groups %}
               {% snippet 'home/snippets/groups.html' %}
-              {% endblock %}
             </div>
           </div>
         </div>

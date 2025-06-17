@@ -1,9 +1,8 @@
 {% set tags = h.get_facet_items_dict('tags', search_facets, limit=3) %}
 {% set placeholder = _('E.g. Lei Orçamentaria Anual') %}
 {% set dataset_type = h.default_package_type() %}
-
-<div class="module-search card box">
-  <form class="module-content search-form" method="get" action="{% url_for dataset_type ~ '.search' %}">
+<div class="module-search card box" style="border: 2px solid #f0f0f0; border-radius: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+  <form class="module-content search-form" method="get" action="{% url_for dataset_type ~ '.search' %}">>
     <h3 class="heading">{{ _("Search data") }}</h3>
     <div class="search-input form-group search-giant">
       <input aria-label="{% block header_site_search_label %}{{ h.humanize_entity_type('package', dataset_type, 'search placeholder') or _('Search datasets') }}{% endblock %}" id="field-main-search" type="text" class="form-control" name="q" value="" autocomplete="off" placeholder="{% block search_placeholder %}{{ placeholder }}{% endblock %}" />

@@ -5,8 +5,10 @@
    ===================================================== */
 
 .account-masthead {
-background-color: rgb(236, 102, 8);
-color: #fff;
+  background-color: rgb(236, 102, 8);
+  color: #fff;
+  
+
 }
 /* The "bubble" containing the number of new notifications. */
 .account-masthead .account .notifications a span {
@@ -14,17 +16,39 @@ color: #fff;
 }
 /* The text and icons in the user account info. */
 .account-masthead .account ul li a {
+  display: block;
+  text-decoration: none;
   color: white;
+  font-size: 13px;
   font-weight: bold;
+  padding: 0 10px;
+  line-height: 31px;
 }
 
-
+.account-masthead .account ul li {
+  border-left: 1px solid white !important;
+}
 
 /* The user account info text and icons, when the user's pointer is hovering
    over them. */
 .account-masthead .account ul li a:hover {
-  color: rgba(255, 255, 255, 0.7);
-  background-color: black;
+  color: black;
+  background-color: rgb(236, 102, 8);
+}
+
+.btn-link {
+  font-weight: 400;
+  color: white;
+  text-decoration: none;
+}
+.btn-link:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+
+.account-masthead .account ul li a.sub {
+  font-weight: bold;
 }
 
 [role=main],
@@ -35,6 +59,14 @@ color: #fff;
 .main {
   padding: 20px 0;
   background: #ffffff; /* or just 'white' */
+}
+
+a.tag:hover {
+  text-decoration: none;
+  color: rgb(236, 102, 8);;
+  background-color: white;
+  border: 1px solid rgb(236, 102, 8);
+  box-shadow: none;
 }
 
 
@@ -48,9 +80,14 @@ color: #fff;
 .masthead {
   background-color: white;
   background:white;
-  border-bottom: 2.5px solid #ddd; 
+  border-bottom: 0.5px solid lightgray; 
 }
 
+.main:after,
+[role=main]:after {
+  bottom: 0;
+  border-top-width: 0px;
+}
 
 .media-grid, .module-grid {
   margin: 0;
@@ -186,7 +223,7 @@ color: #fff;
 }
 /* Add a border line between the top and bottom halves of the front page. */
 .homepage [role="main"] {
-  border-top: 1px solid rgb(204, 204, 204);
+  border-top: 0px solid rgb(204, 204, 204);
 }
 
 /* ====================================
@@ -221,14 +258,16 @@ body {
 
 
 .masthead .navbar .logo img {
-  max-height: 100px !important; /* Aumenta de 60px para 100px */
+  max-height: 85px !important; /* Aumenta de 60px para 100px */
   max-width: 100%;
   transition: height 0.3s;
   height: 80px; /* Tamanho base maior */
 }
 
-@media (min-width: 768px) {
+
+
+@media (min-width: 650px) {
   .masthead .navbar .logo img {
-    height: 120px; /* Tamanho desktop */
+    height: 100px; /* Tamanho desktop */
   }
 }

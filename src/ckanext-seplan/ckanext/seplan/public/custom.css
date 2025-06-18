@@ -258,10 +258,10 @@ body {
 
 
 .masthead .navbar .logo img {
-  max-height: 85px !important; /* Aumenta de 60px para 100px */
+  max-height: 100px !important; /* Aumenta de 60px para 100px */
   max-width: 100%;
   transition: height 0.3s;
-  height: 80px; /* Tamanho base maior */
+  height: 100px; /* Tamanho base maior */
 }
 
 
@@ -269,5 +269,142 @@ body {
 @media (min-width: 650px) {
   .masthead .navbar .logo img {
     height: 100px; /* Tamanho desktop */
+  }
+}
+
+
+
+/* ====================================
+   The groups.html and organizations.html box on the front page
+   ==================================== */
+
+
+
+/* Estilos comuns para grupos e organizações */
+/* Estilos comuns para grupos e organizações */
+.groups-row,
+.organizations-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.simple-group-item,
+.simple-org-item {
+  flex: 0 0 calc(50% - 7.5px); /* 2 items per row with gap consideration */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.simple-group-link,
+.simple-org-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Estilos para imagens de grupos */
+.simple-group-logo {
+  width: 200px;
+  height: 150px;
+  object-fit: contain;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+/* Estilos para imagens de organizações */
+.simple-org-logo {
+  width: 200px;
+  height: 150px;
+  object-fit: contain;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.simple-org-placeholder {
+  width: 220px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  border: none;
+  border-radius: 8px;
+  margin: 0 auto 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effects */
+.simple-group-logo:hover,
+.simple-org-logo:hover,
+.simple-org-placeholder:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para nomes */
+.simple-group-name,
+.simple-org-name {
+  display: block;
+  margin: 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.simple-group-link:hover .simple-group-name,
+.simple-org-link:hover .simple-org-name {
+  color: rgb(236, 102, 8);
+}
+
+/* Estilos para contadores */
+.simple-group-count,
+.simple-org-count {
+  display: block;
+  font-size: 13px;
+  color: #666;
+}
+
+.simple-group-link:hover,
+.simple-org-link:hover {
+  text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .simple-group-item,
+  .simple-org-item {
+    flex: 0 0 calc(50% - 7.5px); /* Keep 2 per row on tablets */
+  }
+  
+  .simple-group-logo,
+  .simple-org-logo,
+  .simple-org-placeholder {
+    width: 180px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .simple-group-item,
+  .simple-org-item {
+    flex: 0 0 100%; /* Single column on mobile */
+  }
+  
+  .simple-group-logo,
+  .simple-org-logo,
+  .simple-org-placeholder {
+    width: 220px;
+    height: 150px;
   }
 }

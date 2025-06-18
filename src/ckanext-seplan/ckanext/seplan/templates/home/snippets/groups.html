@@ -1,5 +1,7 @@
 <section class="module module-shallow module-narrow module-dark">
   <div class="module-promotion card box" style="font-family: 'Hind', sans-serif; text-align: justify; display: flex; flex-direction: column; width: 100%; margin: 0; padding: 24px; overflow: hidden; border-radius: 16px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border: 2px solid #f0f0f0; background: #ffffff;">
+    
+    <!-- Seção de Grupos -->
     <div>
       <div style="text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 15px; color:rgb(68, 68, 68);">
         <i class="fa fa-sitemap"></i>
@@ -18,7 +20,7 @@
                   <img src="{{ group.image_display_url }}" alt="{{ group.display_name or group.name }}" class="simple-group-logo">
                 {% endif %}
                 <span class="simple-group-name">{{ group.display_name or group.name }}</span>
-                <small class="simple-group-count">{{ group.package_count or 0 }} datasets</small>
+                <small class="simple-group-count">{{ group.package_count or 0 }} Datasets</small>
               </a>
             </div>
           {% endfor %}
@@ -27,70 +29,42 @@
         <p>Nenhum grupo disponível.</p>
       {% endif %}
     </div>
+
+    <!-- Divisor entre Grupos e Organizações -->
+    <div style="border-top: 1px solid #e0e0e0; margin: 25px 0 20px 0;"></div>
+
+    <!-- Seção de Organizações -->
+    <div>
+      <div style="text-align: left; font-weight: bold; font-size: 18px; margin-bottom: 15px; color:rgb(68, 68, 68);">
+        <i class="fa fa-building"></i>
+        Organizações
+      </div>
+    </div>
+    
+    <div class="module-content">
+      {% set organizations = h.get_featured_organizations() %}
+      {% if organizations %}
+        <div class="organizations-row">
+          {% for org in organizations %}
+            <div class="simple-org-item">
+              <a href="{{ h.url_for('organization.read', id=org.name) }}" class="simple-org-link">
+                {% if org.image_display_url %}
+                  <img src="{{ org.image_display_url }}" alt="{{ org.display_name or org.name }}" class="simple-org-logo">
+                {% else %}
+                  <div class="simple-org-placeholder">
+                    <i class="fa fa-building" style="font-size: 40px; color: #ccc;"></i>
+                  </div>
+                {% endif %}
+                <span class="simple-org-name">{{ org.display_name or org.name }}</span>
+                <small class="simple-org-count">{{ org.package_count or 0 }} Datasets</small>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>Nenhuma organização disponível.</p>
+      {% endif %}
+    </div>
+
   </div>
 </section>
-
-<style>
-.groups-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.simple-group-item {
-  flex: 0 0 calc(33.333% - 10px);
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.simple-group-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.simple-group-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border: 2px solid #ccc;
-  padding: 5px;
-  margin-bottom: 5px;
-}
-
-.simple-group-name {
-  display: block;
-  margin: 5px 0;
-  font-size: 14px;
-  font-weight: normal;
-  color: #000;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.simple-group-link:hover .simple-group-name {
-  color: rgb(236, 102, 8);
-}
-
-.simple-group-count {
-  display: block;
-  font-size: 12px;
-  color: #000;
-}
-
-.simple-group-link:hover {
-  text-decoration: none;
-}
-
-@media (max-width: 768px) {
-  .simple-group-item {
-    flex: 0 0 calc(50% - 10px);
-  }
-}
-
-@media (max-width: 480px) {
-  .simple-group-item {
-    flex: 0 0 100%;
-  }
-}
-</style>

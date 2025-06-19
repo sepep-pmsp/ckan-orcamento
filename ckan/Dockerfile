@@ -3,14 +3,17 @@ FROM ckan/ckan-base:2.11
 USER root
 
 # Add extensions
-RUN  pip3 install -e 'git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview'
+RUN  pip3 install  -e "git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming" && \
+    pip3 install -e 'git+https://github.com/ckan/ckanext-pdfview#egg=ckanext-pdfview' && \
+    pip3 install  -e 'git+https://github.com/ckan/ckanext-geoview.git#egg=ckanext-geoview'
+
     
-# Copy custom initialization scripts
 COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
-
 COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
+COPY ./ckan_dataset_schema.yaml ${APP_DIR}/src/ckanext-scheming/ckanext/scheming
 
-USER ckan
+
+##USER ckan
 
 RUN for d in $APP_DIR/patches/*; do \
         if [ -d $d ]; then \

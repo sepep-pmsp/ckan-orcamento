@@ -8,3 +8,9 @@ _solr/schema.xml
 _src/*
 local/*
 .env
+
+# dumps
+
+dumps/
+
+

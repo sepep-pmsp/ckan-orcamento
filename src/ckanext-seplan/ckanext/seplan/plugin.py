@@ -6,7 +6,7 @@ class SeplanPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IPackageController, inherit=True) 
-   
+    plugins.implements(plugins.IFacets)
     # IConfigurer
     def update_config(self, config_):
         toolkit.add_template_directory(config_, "templates")
@@ -24,17 +24,19 @@ class SeplanPlugin(plugins.SingletonPlugin):
         
     # IPackageController
     def before_dataset_index(self, pkg_dict: dict) -> dict:
-        spatial_values = []
+        periodo_values = []
         for resource in pkg_dict.get('resources', []):
             value = resource.get('periodo')
-            if value and value not in spatial_values:
-                spatial_values.append(value)
-        if spatial_values:
-            pkg_dict['res_extras_periodo'] = spatial_values
+            if value and value not in periodo_values:
+                periodo_values.append(value)
+        if periodo_values:
+            pkg_dict['res_extras_periodo'] = periodo_values
         return pkg_dict
     
-    def after_dataset_search(self, search_results: dict, search_params: dict) -> dict:
-        search_results['facet_titles'] = {
+
+    def dataset_facets(self, facets_dict, package_type):
+        """Define títulos de facets nativamente no CKAN"""
+        return {
             'organization': 'Organizações',
             'groups': 'Grupos',
             'tags': 'Etiquetas',
@@ -42,8 +44,6 @@ class SeplanPlugin(plugins.SingletonPlugin):
             'license_id': 'Licenças',
             'res_extras_periodo': 'Períodos'
         }
-        return search_results
-
 
 # Funções helper existentes para grupos
 def get_featured_groups(limit=6):

@@ -44,6 +44,26 @@ class SeplanPlugin(plugins.SingletonPlugin):
             'license_id': 'Licenças',
             'res_extras_periodo': 'Períodos'
         }
+        
+    def group_facets(self, facets_dict, group_type, package_type):
+        """Retorna os facets para grupos"""
+        return {
+            'organization': 'Organizações',
+            'tags': 'Etiquetas',
+            'res_format': 'Formatos',
+            'license_id': 'Licenças',
+            'res_extras_periodo': 'Períodos'
+        }
+
+    def organization_facets(self, facets_dict, organization_type, package_type):
+        """Retorna os facets para organizações"""
+        return {
+            'groups': 'Grupos',
+            'tags': 'Etiquetas', 
+            'res_format': 'Formatos',
+            'license_id': 'Licenças',
+            'res_extras_periodo': 'Períodos'
+        }
 
 # Funções helper existentes para grupos
 def get_featured_groups(limit=6):

@@ -92,7 +92,7 @@ Os dados ficam armazenados num azure blob container
 Esta seção documenta a configuração base do CKAN usando Docker Compose, baseada no repositório oficial [ckan-docker](https://github.com/ckan/ckan-docker-base).
 
 ### Componentes Oficiais
-
+c
 * **CKAN Core**: Plataforma base de dados abertos
 * **PostgreSQL**: Banco de dados oficial para metadados
 * **Solr**: Motor de busca e indexação oficial

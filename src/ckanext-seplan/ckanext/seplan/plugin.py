@@ -30,7 +30,8 @@ class SeplanPlugin(plugins.SingletonPlugin):
             if value and value not in periodo_values:
                 periodo_values.append(value)
         if periodo_values:
-            pkg_dict['res_extras_periodo'] = periodo_values
+            pkg_dict['periodo'] = periodo_values
+        
         return pkg_dict
     
 
@@ -42,7 +43,7 @@ class SeplanPlugin(plugins.SingletonPlugin):
             'tags': 'Etiquetas',
             'res_format': 'Formatos',
             'license_id': 'Licenças',
-            'res_extras_periodo': 'Períodos'
+            'periodo': 'Períodos'
         }
         
     def group_facets(self, facets_dict, group_type, package_type):
@@ -52,7 +53,7 @@ class SeplanPlugin(plugins.SingletonPlugin):
             'tags': 'Etiquetas',
             'res_format': 'Formatos',
             'license_id': 'Licenças',
-            'res_extras_periodo': 'Períodos'
+            'periodo': 'Períodos'
         }
 
     def organization_facets(self, facets_dict, organization_type, package_type):
@@ -62,7 +63,7 @@ class SeplanPlugin(plugins.SingletonPlugin):
             'tags': 'Etiquetas', 
             'res_format': 'Formatos',
             'license_id': 'Licenças',
-            'res_extras_periodo': 'Períodos'
+            'periodo': 'Períodos'
         }
 
 # Funções helper existentes para grupos

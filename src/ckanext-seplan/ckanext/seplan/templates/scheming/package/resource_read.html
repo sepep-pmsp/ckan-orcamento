@@ -76,7 +76,7 @@
         {%- endblock -%}
         {%- block resource_more_items -%}
           {% for key, value in h.format_resource_items(res.items()) %}
-            {% if key not in ('created', 'metadata modified', 'last modified', 'format', 'periodo', 'position') %}
+            {% if key not in ('created', 'metadata modified', 'last modified', 'position', 'res extra periodo') %}
               <tr class="toggle-more"><th scope="row">{{ key | capitalize }}</th><td>{{ value }}</td></tr>
             {% endif %}
           {% endfor %}

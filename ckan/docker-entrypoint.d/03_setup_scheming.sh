@@ -2,4 +2,4 @@
 
 ckan config-tool $CKAN_INI "scheming.dataset_schemas = ckanext.scheming:ckan_dataset_schema.yaml"
 ckan config-tool $CKAN_INI "scheming.presets = ckanext.scheming:presets.json"
-ckan config-tool $CKAN_INI "search.facets = organization groups tags res_format license_id periodo"
+ckan config-tool $CKAN_INI "search.facets = organization groups tags res_format license_id res_extra_periodo"

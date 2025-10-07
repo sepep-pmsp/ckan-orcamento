@@ -81,6 +81,8 @@ resource_fields:
     label: Format
     preset: resource_format_autocomplete
 
-  - field_name: periodo
+  - field_name: res_extra_periodo
     label: Período
     form_placeholder: Período de referência dos dados (Eg. 2025, 2020-2025)
+  
+##TODO - ADICIONAR LICENSE

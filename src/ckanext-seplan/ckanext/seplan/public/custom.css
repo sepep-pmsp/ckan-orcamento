@@ -1,5 +1,3 @@
-
-
 /* =====================================================
    The "account masthead" bar across the top of the site
    ===================================================== */
@@ -278,22 +276,19 @@ body {
    The groups.html and organizations.html box on the front page
    ==================================== */
 
-
-
-/* Estilos comuns para grupos e organizações */
 /* Estilos comuns para grupos e organizações */
 .groups-row,
 .organizations-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px; /* Reduzido de 15px para 10px */
   justify-content: flex-start;
 }
 
 .simple-group-item,
 .simple-org-item {
-  flex: 0 0 calc(50% - 7.5px); /* 2 items per row with gap consideration */
-  margin-bottom: 20px;
+  flex: 0 0 calc(50% - 5px); /* Ajustado para o gap menor */
+  margin-bottom: 10px; /* Reduzido de 20px para 10px */
   text-align: center;
 }
 
@@ -304,58 +299,52 @@ body {
   display: block;
 }
 
-/* Estilos para imagens de grupos */
-.simple-group-logo {
-  width: 200px;
-  height: 150px;
-  object-fit: contain;
-  padding: 5px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background: #ffffff;
-  border: none;
-  transition: transform 0.3s ease;
-}
-
-/* Estilos para imagens de organizações */
+/* Estilos para imagens de grupos e organizações - MESMO TAMANHO */
+.simple-group-logo,
 .simple-org-logo {
-  width: 200px;
-  height: 150px;
-  object-fit: contain;
-  padding: 5px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background: #ffffff;
-  border: none;
-  transition: transform 0.3s ease;
+  width: 120px !important; /* Mesmo tamanho para ambos */
+  height: 90px !important; /* Mesmo tamanho para ambos */
+  object-fit: contain !important;
+  padding: 5px !important;
+  margin-bottom: 8px !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  border: none !important;
+  transition: transform 0.3s ease !important;
 }
 
 .simple-org-placeholder {
-  width: 220px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f9f9f9;
-  border: none;
-  border-radius: 8px;
-  margin: 0 auto 10px;
-  transition: transform 0.3s ease;
+  width: 120px !important; /* Mesmo tamanho que as logos */
+  height: 90px !important; /* Mesmo tamanho que as logos */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f9f9f9 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  margin: 0 auto 8px !important;
+  transition: transform 0.3s ease !important;
 }
 
-/* Hover effects */
+/* Ícone dentro do placeholder também menor */
+.simple-org-placeholder i {
+  font-size: 30px !important; /* Reduzido de 40px para 30px */
+  color: #ccc;
+}
+
+/* Hover effects para grupos e organizações */
 .simple-group-logo:hover,
 .simple-org-logo:hover,
 .simple-org-placeholder:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) !important;
 }
 
 /* Estilos para nomes */
 .simple-group-name,
 .simple-org-name {
   display: block;
-  margin: 8px 0;
-  font-size: 16px;
+  margin: 6px 0; /* Reduzido de 8px para 6px */
+  font-size: 14px; /* Reduzido de 16px para 14px */
   font-weight: 500;
   color: #333;
   text-decoration: none;
@@ -371,7 +360,7 @@ body {
 .simple-group-count,
 .simple-org-count {
   display: block;
-  font-size: 13px;
+  font-size: 12px; /* Reduzido de 13px para 12px */
   color: #666;
 }
 
@@ -380,32 +369,34 @@ body {
   text-decoration: none;
 }
 
-/* Responsive design */
+/* Responsive design - MESMO TAMANHO PARA GRUPOS E ORGANIZAÇÕES */
 @media (max-width: 768px) {
   .simple-group-item,
   .simple-org-item {
-    flex: 0 0 calc(50% - 7.5px); /* Keep 2 per row on tablets */
+    flex: 0 0 calc(50% - 5px) !important; /* Keep 2 per row on tablets */
+    margin-bottom: 8px !important; /* Reduzido para tablets */
   }
   
   .simple-group-logo,
   .simple-org-logo,
   .simple-org-placeholder {
-    width: 180px;
-    height: 120px;
+    width: 100px !important; /* Mesmo tamanho em tablets */
+    height: 75px !important; /* Mesmo tamanho em tablets */
   }
 }
 
 @media (max-width: 480px) {
   .simple-group-item,
   .simple-org-item {
-    flex: 0 0 100%; /* Single column on mobile */
+    flex: 0 0 100% !important; /* Single column on mobile */
+    margin-bottom: 6px !important; /* Ainda menor em mobile */
   }
   
   .simple-group-logo,
   .simple-org-logo,
   .simple-org-placeholder {
-    width: 220px;
-    height: 150px;
+    width: 90px !important; /* Mesmo tamanho em mobile */
+    height: 70px !important; /* Mesmo tamanho em mobile */
   }
 }
 

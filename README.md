@@ -1,89 +1,169 @@
 # Documentação CKAN SEPLAN - Repositório Customizado
 
----
-TODO: Fazer index com as separacoes do repositorio
-
 # PARTE 1: DOCUMENTAÇÃO DAS MODIFICAÇÕES E CUSTOMIZAÇÕES
 
-## 1. Visão Geral do Repositório Customizado
+## Como Contribuir
 
-Este repositório contém uma implementação customizada do CKAN especificamente desenvolvida para atender às necessidades da SEPLAN. As principais modificações incluem extensões personalizadas, configurações específicas e processos automatizados de deploy e backup.
-
-### Estrutura do Projeto
-
-#TODO
-
-## 2. Extensões Customizadas
-
-### 2.1 Extensão ckanext-seplan
-
-A **ckanext-seplan** é a extensão principal que abriga todas as customizações específicas para a SEPLAN:
-
-#### Funcionalidades Implementadas:
-
-- **Interface de Usuário Customizada**: 
-  - Tema visual adaptado à identidade visual da SEPLAN
-  - Layout responsivo com elementos específicos
-  - Componentes de navegação personalizados
-  - Dashboard administrativo customizado
+Contribuições para melhorar este portal são bem-vindas. Para configurar o ambiente de desenvolvimento e entender o fluxo de trabalho, consulte nosso [**Guia de Contribuição**](CONTRIBUTING.md).
 
 
-### 2.2 Extensão ckanext-scheming
+## Visão Geral do Projeto
 
-A **ckanext-scheming** é utilizada para personalizar o modelo de metadados:
+Este repositório contém o código-fonte e a documentação da instância customizada do CKAN para o Portal de Dados Orçamentários do Município de São Paulo. O projeto utiliza uma extensão personalizada, a `ckanext-seplan`, para adaptar a aparência e as funcionalidades da plataforma às necessidades específicas do portal.
 
-#### Recursos Implementados:
+O objetivo principal é oferecer um ambiente centralizado, transparente e de fácil acesso para os dados do ciclo orçamentário, incluindo o Plano Plurianual (PPA), a Lei de Diretrizes Orçamentárias (LDO), a Lei Orçamentária Anual (LOA) e a execução orçamentária.
 
-- **Esquemas Personalizados**: Definição de campos específicos usando YAML/JSON
-- **Validação de Dados**: Regras de validação customizadas para garantir qualidade
-- **Formulários Dinâmicos**: Criação automática de formulários baseados em esquemas
-- **Tipos de Dados Específicos**: Campos personalizados para necessidades da SEPLAN
+## Principais Funcionalidades e Customizações
 
+As customizações estão concentradas na extensão `ckanext-seplan`, que implementa lógicas de backend através do `plugin.py` e personaliza a interface do usuário com templates HTML. 
 
-## Explicar com exemplo aqui
+### Funcionalidades do Plugin (`plugin.py`)
 
-## 4. Aspectos do Deploy
+O arquivo `plugin.py` é o núcleo da extensão e implementa diversas interfaces do CKAN para estender seu comportamento padrão.
 
-### 4.1 Pipeline CI/CD
+* **IConfigurer**: Este plugin é responsável por registrar os diretórios customizados da extensão (`templates/`, `public/`, `assets/`) na aplicação principal do CKAN. Isso permite que a extensão sobrescreva templates padrão e sirva arquivos estáticos próprios, como logos, imagens e folhas de estilo CSS.
 
-O sistema utiliza GitHub Actions para automatização completa do deploy:
+* **ITemplateHelpers**: Implementa funções Python que podem ser chamadas diretamente dos templates HTML. Isso permite que a interface exiba informações dinâmicas, como listas de organizações e grupos em destaque na página inicial, sem a necessidade de lógica complexa no frontend. As funções principais são `get_featured_groups` e `get_featured_organizations`.
 
-#todo inserir referencia para o procedimento no repositório
+* **IPackageController**: Este plugin modifica o processo de indexação de dados. Através do método `before_dataset_index`, ele extrai um metadado específico de cada recurso (`res_extra_periodo`) e o promove ao nível do conjunto de dados. Essa modificação é crucial, pois torna o campo "Períodos" uma faceta pesquisável em todo o portal.
 
-### 4.2 Ambientes
+* **IFacets**: Com esta interface, os nomes técnicos das facetas de busca são substituídos por títulos mais amigáveis ao usuário. Por exemplo, `organization` é exibido como "Organizações", `res_format` como "Formatos", e o campo customizado `res_extra_periodo` é apresentado como "Períodos", melhorando a experiência de navegação e busca.
 
-#### Produção
-- **URL**: https://ckan.seplan.gov.br
-- **Deploy**: Manual via aprovação no GitHub
-- **Monitoramento**: 24/7 com alertas automáticos
+### Funções Customizadas (`plugin.py`)
 
-### 4.3 Configurações Específicas
+Para dar vida às funcionalidades do portal, o `plugin.py` implementa funções auxiliares e modifica o comportamento de indexação do CKAN.
 
-#### Variáveis de Ambiente Produção
+#### Funções de Template (Template Helpers)
 
-## 5. Política de Backup
+Estas funções são expostas para serem usadas diretamente nos arquivos de template (`.html`), permitindo que a interface busque dados dinâmicos do backend - para mais informações, veja a seção sobre helper functions na documentação do [CKAN](https://docs.ckan.org/en/2.9/theming/template-helper-functions.html). 
 
-### 5.1 Estratégia Implementada
+* **`get_featured_groups()`**: Busca e retorna uma lista de grupos para exibição em destaque na página inicial. A função prioriza grupos que possuem uma imagem ou que tenham pelo menos um dataset associado.
+* **`get_all_groups_with_images()`**: Retorna uma lista de todos os grupos que possuem uma imagem de exibição cadastrada, ordenada alfabeticamente.
+* **`get_featured_organizations()`**: Busca e retorna uma lista de organizações para exibição em destaque. Assim como a função de grupos, prioriza aquelas com imagem ou com datasets publicados.
 
-**Frequência**: Backups automatizados executados **a cada 2 semanas**
+#### Funções de indexação de metadados (`before_dataset_index`)
 
-**Componentes incluídos**:
-- Banco PostgreSQL completo (metadados, usuários, organizações)
-- Arquivos de dados (uploads, recursos)
-- Configurações customizadas
-- Esquemas de metadados
+Esta função é uma das customizações de backend mais importantes e é o que torna a faceta "Períodos" funcional.
 
-### 5.2 Armazenamento Azure
+O CKAN permite filtrar datasets por campos que existem no nível do *dataset* (conjunto de dados), mas o campo "Período" (`res_extra_periodo`) foi originalmente definido no nível de *recurso* (os arquivos individuais dentro de um dataset).
 
-Os dados ficam armazenados num azure blob container 
+A função **`before_dataset_index`** resolve esse problema. Ela é executada automaticamente toda vez que um dataset está prestes a ser indexado pelo motor de busca (Solr). O seu papel é:
+1.  **Inspecionar o Dataset**: Acessa cada um dos recursos (arquivos) dentro do dataset que será indexado.
+2.  **Coletar os Períodos**: Lê o valor do campo `res_extra_periodo` de cada recurso.
+3.  **Promover os Dados**: Agrupa todos os valores únicos de "Período" encontrados nos recursos e os adiciona a uma nova lista no nível do *dataset*.
+4.  **Permitir a Faceta**: Ao "promover" essa informação, o campo "Períodos" se torna visível para o Solr, que consegue então criar um filtro (faceta) a partir dele na página de busca. Isto permite a criação de filtros de busca a partir dos metadados customizados. 
 
+Em resumo, essa função transforma um metadado de nível de recurso em um metadado de nível de dataset, tornando-o uma ferramenta de busca poderosa para o usuário final.
 
+### Customização de Templates (Interface do Usuário)
 
-### 5.4 Política de rentenção
+Vários arquivos de template foram modificados ou criados para customizar a landing page e o css do portal. Estes arquivos estão localizados em ckanext-seplan/ckanext/seplan/templates e ckanext-seplan/ckanext/seplan/public.
 
-- Por padrão, os últimos 5 backups são armazenados no storage.
+* **`header.html`**: Personaliza o cabeçalho do site, substituindo o logo padrão do CKAN pelo logo da SEPLAN.
 
----
+* **`footer.html`**: Modifica o rodapé global. Altera o link "Sobre" para direcionar à página correta do portal e inclui a logo da "Base dos Dados" como desenvolvedora da solução.
+
+* **`search.html`**: Altera o componente de busca na página inicial, definindo um texto de exemplo (`placeholder`) específico para o contexto orçamentário, como "E.g. Lei Orçamentaria Anual".
+
+* **`promoted.html` e `about_text.html`**: Estes arquivos contêm o texto de boas-vindas e a apresentação do portal. Eles explicam o propósito do site, os tipos de dados disponíveis e o objetivo de promover a transparência fiscal.
+
+* **`organizations.html`**: Cria a seção "Organizações" na página inicial. Utiliza uma função do `ITemplateHelpers` para buscar e exibir as organizações em destaque, com seus logos, nomes e a quantidade de datasets publicados.
+
+* **`groups.html`**: Similarmente ao arquivo de organizações, este template renderiza a seção de "Grupos" temáticos na página inicial, exibindo os grupos mais relevantes com suas imagens e contagem de datasets.
+
+* **`resource_read.html`**: Ajusta a página de visualização de um recurso de dados. A modificação impede que o metadado customizado "Período" seja exibido de forma duplicada na tabela de informações adicionais. Esta configuração merece uma explicação adicional: o arquivo resource_read.html é gerada pela extensão ckanext-scheming. Essa extensão é utilizada para criar campos de metadados customizados. 
+
+## Extensões Adicionais
+
+### Customização do modelo de Metadados
+
+A extensão `ckanext-scheming` viabilza a criação e gestão de **esquemas de metadados personalizados** através de arquivos YAML, sem a necessidade de implementar funcionalidades em Python através das interaces de Plugins do Ckan. Isso possibilita a criação de formulários de submissão de dados totalmente adaptados às necessidades específicas de um projeto.
+
+Nesta implementação, a `ckanext-scheming` é utilizada para adaptar o formulário de submissão de dados às necessidades do portal orçamentário. A principal customização realizada foi a adição do campo **`Período`** (com o nome técnico `res_extra_periodo`). Este campo foi adicionado no **nível do recurso** (resource) que permite que cada arquivo individual (como uma planilha ou PDF) dentro de um conjunto de dados seja associado a um ano ou período de referência específico (ex: '2025'). A criação deste campo via `ckanext-scheming` foi o primeiro passo que, posteriormente, permitiu sua utilização como um filtro de busca (faceta), através da customização de indexação realizada no `plugin.py`.
+
+### Outras extensões
+
+Além da extensão principal `ckanext-seplan` e da `ckanext-scheming`, esta instância do CKAN utiliza outras extensões para adicionar funcionalidades importantes de visualização e configuração:
+
+* **`ckanext-envvars`**: Essencial para ambientes containerizados, esta extensão permite que a configuração do CKAN seja lida a partir de variáveis de ambiente. Em vez de ter valores "hardcoded" no arquivo `ckan.ini`, configurações como senhas de banco de dados, chaves secretas e listas de plugins podem ser injetadas de forma segura durante a execução do contêiner. Essas configurações ficam no arquivo .env
+
+* **`ckanext-pdf_view`**: Melhora a experiência do usuário ao integrar um visualizador de PDFs diretamente na página do recurso. Com esta extensão, em vez de precisar baixar um arquivo `.pdf` para visualizá-lo, o usuário pode abri-lo e lê-lo dentro da própria interface do CKAN.
+
+* **`ckanext-geoview`**: Adiciona a capacidade de visualizar dados geoespaciais. Esta extensão fornece visualizadores para formatos como GeoJSON, KML e Shapefile (quando convertidos), permitindo que recursos com dados geográficos sejam exibidos como mapas interativos diretamente na página do recurso, em vez de apenas um link para download.
+
+## Deploy e CI/CD
+
+O processo de deploy da aplicação é automatizado com github actions. O script pode ser acessado em .github/workflows. O workflow, definido no arquivo de configuração do GitHub Actions, automatiza o processo de build e publicação das imagens Docker customizadas da aplicação.
+
+### Gatilhos do Workflow (Triggers)
+
+O processo é iniciado automaticamente nos seguintes eventos:
+* Quando há um `push` para a branch `master`.
+* O processo também pode ser iniciado manualmente através da interface do GitHub Actions (`workflow_dispatch`).
+
+### Processo de build das imagens
+
+Quando acionado, o workflow executa os seguintes passos em um ambiente `ubuntu-latest`:
+
+1.  **Autenticação:** O primeiro passo é realizar o login no Docker Hub utilizando credenciais seguras armazenadas nos `secrets` do repositório (`DOCKERHUB_USERNAME` e `DOCKERHUB_PASSWORD`).
+
+2.  **Build das Imagens:** O workflow constrói três imagens Docker distintas, cada uma a partir do seu respectivo `Dockerfile` e contexto:
+    * **NGINX:** Construída a partir do diretório `./nginx`.
+    * **PostgreSQL:** Construída a partir do diretório `./postgresql`.
+    * **CKAN:** Construída a partir do diretório `./ckan`, que contém a aplicação principal e as extensões customizadas.
+
+3.  **Push para o Docker Hub:** Após cada imagem ser construída com sucesso, ela é enviada (push) para o repositório no Docker Hub com a tag `latest`. As imagens publicadas são:
+    * `folhesgabriel/ckan-docker-nginx:latest` 
+    * `folhesgabriel/ckan-docker-postgresql:latest` 
+    * `folhesgabriel/ckan-docker-ckan:latest` 
+
+### Processo de deploy no ambiente de produção
+
+1. Acessar a VM de produção via SSH.
+2. Navegar até o diretório do `docker compose`.
+3. Matar a rede de containers atual `docker compose down`.
+3. Executar o comando `docker compose pull` para baixar as imagens mais recentes do Docker Hub.
+4. Executar `docker compose up -d` para recriar os contêineres com as novas imagens, aplicando as atualizações.
+
+## Política de Backup
+
+Esta política descreve o processo automatizado para garantir a segurança e a recuperabilidade dos dados da plataforma CKAN. O processo é gerenciado por um script que executa o backup dos bancos de dados, armazena-os no Azure Blob Storage e mantém uma política de retenção para gerenciar o espaço de armazenamento. Todas as operações são registradas em um arquivo de log dentro da máquina virtual.
+
+### Componentes do Backup
+
+Cada arquivo de backup gerado é um arquivo compactado (`.tar.gz`) que contém os seguintes componentes essenciais:
+
+* **Dump do Banco de Dados Principal (`ckandb`):** Um arquivo `.sql` contendo a exportação completa do banco de dados principal do CKAN.  Isso inclui todos os metadados dos datasets, usuários, organizações, grupos e configurações do sistema.
+
+* **Dump do Banco de Dados Datastore (`datastore`):** Um arquivo `.sql` contendo a exportação completa do banco de dados do Datastore. Isso inclui todos os dados tabulares que foram enviados para a API do Datastore.
+
+### O que Não é Incluído
+
+Este processo de backup foca exclusivamente nos bancos de dados. Ele **não** inclui os arquivos enviados pelos usuários (como CSVs, PDFs, imagens) que são armazenados no *filestore* do CKAN. Uma estratégia de backup separada deve ser considerada para o diretório de armazenamento (`CKAN_STORAGE_PATH`).
+
+### Processo de Execução do Backup
+
+O backup é executado na seguinte sequência:
+
+1.  **Criação dos Dumps de Banco de Dados:** O script se conecta ao contêiner do banco de dados e utiliza o comando `pg_dump` para exportar os bancos de dados `ckandb` e `datastore` separadamente. Cada dump é salvo em um arquivo `.sql` com um timestamp único em um diretório temporário (`/tmp/ckan_backups`).
+
+2.  **Compactação:** Os dois arquivos `.sql` gerados são combinados em um único arquivo de backup compactado no formato `.tar.gz` (ex: `ckan_backup_20251008_073447.tar.gz`). Após a compactação bem-sucedida, os arquivos `.sql` originais são removidos.
+
+3.  **Envio dos arquivos para o  Azure Blob Storage:** O arquivo compactado é enviado para um contêiner de armazenamento dedicado chamado `ckan-orcamento`, localizado na conta de Azure Blob Storage `ckanbackups`.
+
+### Política de Retenção
+
+Foi implementado uma política de retenção:
+
+* Somente os **10 backups mais recentes** são mantidos no Azure Blob Storage.
+* Ao final de cada execução bem-sucedida do backup, o script lista todos os backups mais antigos (além dos 10 mais recentes) e os exclui automaticamente do Azure.
+
+### Monitoramento e Logs
+
+Todas as ações executadas pelo script de backup, desde o início até a conclusão (ou falha), são registradas com data e hora em um arquivo de log dentro da VM em `/var/log/ckan_backup.log`. Este arquivo serve como um registro de auditoria e é a principal ferramenta para diagnosticar quaisquer problemas com o processo de backup.
+
+## 6. Vixe, deu ruim. Algum problema ocorreu e os dados e metadados no ckan foram perdidos. Como restaurar? 
+#TODO: Adicionar tutorial de Restore
 
 # PARTE 2: DOCUMENTAÇÃO OFICIAL CKAN DOCKER
 
@@ -92,7 +172,7 @@ Os dados ficam armazenados num azure blob container
 Esta seção documenta a configuração base do CKAN usando Docker Compose, baseada no repositório oficial [ckan-docker](https://github.com/ckan/ckan-docker-base).
 
 ### Componentes Oficiais
-c
+
 * **CKAN Core**: Plataforma base de dados abertos
 * **PostgreSQL**: Banco de dados oficial para metadados
 * **Solr**: Motor de busca e indexação oficial

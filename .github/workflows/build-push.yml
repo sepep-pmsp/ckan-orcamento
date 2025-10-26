@@ -1,4 +1,4 @@
-name: Build and Push Ckan Docker Images to Azure Container Registry
+name: Build and Push Images to Azure Container Registry
 
 on:
   workflow_dispatch:

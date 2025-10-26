@@ -37,6 +37,7 @@ jobs:
          context: ./nginx
          file: ./nginx/Dockerfile
          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ckan-nginx:latest
+         push: true
 
     - name: PostgreSQL build and push to ACR
       uses: docker/build-push-action@v5
@@ -44,6 +45,7 @@ jobs:
          context: ./postgresql
          file: ./postgresql/Dockerfile
          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ckan-postgresql:latest
+         push: true
 
     - name: CKAN build and push to ACR
       uses: docker/build-push-action@v5
@@ -51,3 +53,4 @@ jobs:
          context: ./ckan
          file: ./ckan/Dockerfile
          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ckan-ckan:latest
+         push: true

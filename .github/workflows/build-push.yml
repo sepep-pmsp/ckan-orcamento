@@ -1,4 +1,4 @@
-name: Build and Push Images to Azure Container Registry
+name: Build and Push Ckan Images to Azure Container Registry
 
 on:
   workflow_dispatch:
@@ -8,8 +8,6 @@ on:
   pull_request:
     branches:
       - master
-
-
       
 jobs: 
   build_push_acs:  
@@ -37,6 +35,7 @@ jobs:
          context: ./nginx
          file: ./nginx/Dockerfile
          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ckan-nginx:latest
+         #Setar {{ github.event_name != 'pull_request' }}
          push: true
 
     - name: PostgreSQL build and push to ACR

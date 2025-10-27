@@ -1,5 +1,5 @@
 /* =====================================================
-   The "account masthead" bar across the top of the site
+   Account Masthead
    ===================================================== */
 
 .account-masthead {
@@ -8,11 +8,9 @@
   
 
 }
-/* The "bubble" containing the number of new notifications. */
 .account-masthead .account .notifications a span {
   background-color: black;
 }
-/* The text and icons in the user account info. */
 .account-masthead .account ul li a {
   display: block;
   text-decoration: none;
@@ -27,8 +25,6 @@
   border-left: 1px solid white !important;
 }
 
-/* The user account info text and icons, when the user's pointer is hovering
-   over them. */
 .account-masthead .account ul li a:hover {
   color: black;
   background-color: rgb(236, 102, 8);
@@ -48,6 +44,10 @@
 .account-masthead .account ul li a.sub {
   font-weight: bold;
 }
+
+/* =====================================================
+   Main Content & Layout
+   ===================================================== */
 
 [role=main],
 .main {
@@ -71,8 +71,9 @@ a.tag:hover {
 .toolbar .breadcrumb a {
   color: rgb(236, 102, 8);
 }
+
 /* ========================================================================
-   The main masthead bar that contains the site logo, nav links, and search
+   Main Masthead (Logo, Nav, Search)
    ======================================================================== */
 
 .masthead {
@@ -99,26 +100,18 @@ a.tag:hover {
 }
 
 
-/* The "navigation pills" in the masthead (the links to Datasets,
-   Organizations, etc) when the user's pointer hovers over them. */
 .masthead .navigation .nav-pills li a:hover {
   background-color: rgb(48, 48, 48);
   color: white;
 }
-/* The "active" navigation pill (for example, when you're on the /dataset page
-   the "Datasets" link is active). */
 .masthead .navigation .nav-pills li.active a {
   background-color: rgb(74, 74, 74);
 }
-/* The "box shadow" effect that appears around the search box when it
-   has the keyboard cursor's focus. */
 .masthead input[type="text"]:focus {
   -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
   box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
 }
 
-/* The "main navigation bar" in the masthead, which contains the links to
-   Datasets, Organizations, etc. */
 .masthead .main-navbar ul li a {
     display: block;
     padding: 0.5rem 1rem;
@@ -144,7 +137,10 @@ a.tag:hover {
   transition: color 0.2s ease-in;
 }
 
-/* Remove background de todos os elementos da homepage */
+/* =====================================================
+   Homepage Specific Styles
+   ===================================================== */
+
 .homepage,
 .homepage div[role="main"],
 .homepage .main.hero,
@@ -160,8 +156,6 @@ a.tag:hover {
     background-image: none !important;
 }
 
-
-/* Estilos para o card de promoção */
 .module-promotion.card.box {
   display: flex;
   flex-direction: column;
@@ -187,73 +181,55 @@ a.tag:hover {
   border: 2px solid #f0f0f0; /* Borda mais visível */
   background: #ffffff;
 }
-/* ===========================================
-   The content in the middle of the front page
-   =========================================== */
-
    
-   
-/* Remove the "box shadow" effect around various boxes on the page. */
 .box {
   box-shadow: none;
 }
-/* Remove the borders around the "Welcome to CKAN" and "Search Your Data"
-   boxes. */
 .hero .box {
   border: none;
 }
-/* Change the colors of the "Search Your Data" box. */
 .homepage .module-search .module-content {
   color: rgb(68, 68, 68);
   background-color: white;
 }
-/* Change the background color of the "Popular Tags" box. */
 .homepage .module-search .tags {
   background-color: rgb(61, 61, 61);
 }
-/* Remove some padding. This makes the bottom edges of the "Welcome to CKAN"
-   and "Search Your Data" boxes line up. */
 .module-content:last-child {
   padding-bottom: 0px;
 }
 .homepage .module-search {
   padding: 0px;
 }
-/* Add a border line between the top and bottom halves of the front page. */
 .homepage [role="main"] {
   border-top: 0px solid rgb(204, 204, 204);
 }
 
-/* ====================================
-   The searh box on the front page
-   ==================================== */
-
-
-/* Change the background color of the "Popular Tags" box. */
 .homepage .module-search .tags {
   background-color: rgb(236, 102, 8);
 }
 
-/* ====================================
-   The footer at the bottom of the site
-   ==================================== */
+/* =====================================================
+   Footer
+   ===================================================== */
 
 .site-footer,
 body {
   background-color: #404040;
   background: #404040;
 }
-/* The text in the footer. */
 .site-footer,
 .site-footer label,
 .site-footer small {
   color: rgba(255, 255, 255, 0.6);
 }
-/* The link texts in the footer. */
 .site-footer a {
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* =====================================================
+   Masthead Logo Sizing
+   ===================================================== */
 
 .masthead .navbar .logo img {
   max-height: 100px !important; /* Aumenta de 60px para 100px */
@@ -262,21 +238,16 @@ body {
   height: 100px; /* Tamanho base maior */
 }
 
-
-
 @media (min-width: 650px) {
   .masthead .navbar .logo img {
     height: 100px; /* Tamanho desktop */
   }
 }
 
+/* =====================================================
+   Homepage Groups & Organizations
+   ===================================================== */
 
-
-/* ====================================
-   The groups.html and organizations.html box on the front page
-   ==================================== */
-
-/* Estilos comuns para grupos e organizações */
 .groups-row,
 .organizations-row {
   display: flex;
@@ -299,47 +270,41 @@ body {
   display: block;
 }
 
-/* Estilos para imagens de grupos e organizações - MESMO TAMANHO */
 .simple-group-logo,
 .simple-org-logo {
   width: 120px !important; /* Mesmo tamanho para ambos */
   height: 90px !important; /* Mesmo tamanho para ambos */
-  object-fit: contain !important;
+  object-fit: cover !important;
   padding: 5px !important;
   margin-bottom: 8px !important;
   border-radius: 8px !important;
   background: #ffffff !important;
-  border: none !important;
   transition: transform 0.3s ease !important;
 }
 
 .simple-org-placeholder {
-  width: 120px !important; /* Mesmo tamanho que as logos */
-  height: 90px !important; /* Mesmo tamanho que as logos */
+  width: 110px !important; /* Mesmo tamanho que as logos */
+  height: 80px !important; /* Mesmo tamanho que as logos */
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   background: #f9f9f9 !important;
-  border: none !important;
   border-radius: 8px !important;
   margin: 0 auto 8px !important;
   transition: transform 0.3s ease !important;
 }
 
-/* Ícone dentro do placeholder também menor */
 .simple-org-placeholder i {
   font-size: 30px !important; /* Reduzido de 40px para 30px */
   color: #ccc;
 }
 
-/* Hover effects para grupos e organizações */
 .simple-group-logo:hover,
 .simple-org-logo:hover,
 .simple-org-placeholder:hover {
   transform: scale(1.05) !important;
 }
 
-/* Estilos para nomes */
 .simple-group-name,
 .simple-org-name {
   display: block;
@@ -356,7 +321,6 @@ body {
   color: rgb(236, 102, 8);
 }
 
-/* Estilos para contadores */
 .simple-group-count,
 .simple-org-count {
   display: block;
@@ -369,7 +333,6 @@ body {
   text-decoration: none;
 }
 
-/* Responsive design - MESMO TAMANHO PARA GRUPOS E ORGANIZAÇÕES */
 @media (max-width: 768px) {
   .simple-group-item,
   .simple-org-item {
@@ -400,14 +363,9 @@ body {
   }
 }
 
-
-
-
-/* ====================================
-   On hover filter effects on conjuntos de dados page
-   ==================================== */
-
-
+/* =====================================================
+   Dataset Page Sidebar & Filters
+   ===================================================== */
 
 .module-narrow .nav-item.active > a:before,
 .module-narrow .nav-aside li.active a:before {

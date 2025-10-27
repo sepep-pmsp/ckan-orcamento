@@ -1,4 +1,11 @@
-<div class="module-promotion card box" style="font-family: 'Hind', sans-serif; text-align: justify;">
+
+<div class="module-promotion card box">
+
+  {% set intro = g.site_intro_text %}
+  <div>
+    {% if intro %}
+      {{ h.render_markdown(intro) | safe }}
+    {% else %}
     <div>
       <h1 class="page-heading" style="text-align: center; font-weight: bold;">Bem vindo(a) ao Portal de Dados Orçamentários do Município de São Paulo</h1>
      
@@ -14,5 +21,11 @@
         <strong>Ao centralizar os dados do planejamento e da execução do orçamento municipal em um único ambiente, buscamos fortalecer o controle social e a participação cidadã nas decisões sobre o uso dos recursos públicos.</strong>
       </p>
     </div>
+
+    {% endif %}
   </div>
+</div>
+
+
+
   

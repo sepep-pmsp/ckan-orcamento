@@ -1,13 +1,13 @@
-name: Build and Push Ckan Images to Azure Container Registry
+name: Build, Push Ckan Images to Azure Container Registry and Pull images to Production Environment
 
 on:
   workflow_dispatch:
   push:
     branches:
       - master
-  # pull_request:
-  #   branches:
-  #     - master
+  pull_request:
+    branches:
+      - master
       
 jobs: 
   build_push_acs:  
@@ -53,3 +53,29 @@ jobs:
          file: ./ckan/Dockerfile
          tags: ${{ secrets.ACR_LOGIN_SERVER }}/ckan-ckan:latest
          push: true
+
+  deploy_to_vm:
+    runs-on: ubuntu-latest
+    needs: build_push_acs
+    
+    steps:
+    - name: SSH into VM and deploy new images
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USERNAME }}
+        key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+        script: |
+          set -e 
+          
+          echo "Logging into Azure Container Registry..."
+          docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_SP_APP_ID }} -p ${{ secrets.ACR_SP_PASSWORD }}
+          
+          echo "Navigating to Docker Compose directory..."
+          cd ckan-orcamento
+          
+          echo "Pulling the latest images..."
+          docker compose -f docker-compose.prod.yml pull
+          
+          echo "Stopping and restarting CKAN services..."
+          docker compose -f docker-compose.prod.yml up -d --remove-orphans

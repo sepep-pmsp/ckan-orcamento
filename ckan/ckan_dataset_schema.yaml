@@ -28,6 +28,10 @@ dataset_fields:
   - field_name: owner_org
     label: Organization
     preset: dataset_organization
+  
+  - field_name: license_id
+    label: License
+    form_placeholder: AGLP
 
   - field_name: url
     label: Source
@@ -84,5 +88,3 @@ resource_fields:
   - field_name: res_extra_periodo
     label: Período
     form_placeholder: Período de referência dos dados (Eg. 2025, 2020-2025)
-  
-##TODO - ADICIONAR LICENSE

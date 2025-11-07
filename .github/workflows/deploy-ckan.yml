@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - adjust/backend-uploadtimeout
 
 jobs: 
   build_push_acs:  

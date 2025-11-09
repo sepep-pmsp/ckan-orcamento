@@ -2,6 +2,35 @@
 
 Este guia explica como contribuir com customizações na interface do usuário (UI) do CKAN utilizando a extensão `ckanext-seplan` em ambiente de desenvolvimento.
 
+## Sumário
+
+- [Sobre o CKAN](#sobre-o-ckan)
+- [Pré-requisitos](#pré-requisitos)
+- [Configuração do Ambiente de Desenvolvimento](#configuração-do-ambiente-de-desenvolvimento)
+  - [1. Clonando o Repositório](#1-clonando-o-repositório)
+  - [2. Configuração do Ambiente](#2-configuração-do-ambiente)
+  - [3. Build das Imagens de Desenvolvimento](#3-build-das-imagens-de-desenvolvimento)
+  - [4. Sobre a Extensão no Repositório](#4-sobre-a-extensão-no-repositório)
+- [Estrutura da Extensão ckanext-seplan](#estrutura-da-extensão-ckanext-seplan)
+- [Customização da Interface](#customização-da-interface)
+  - [1. Personalizando CSS](#1-personalizando-css)
+  - [2. Customizando Templates](#2-customizando-templates)
+  - [3. Registrando Recursos Estáticos](#3-registrando-recursos-estáticos)
+- [Exemplos de Customizações Avançadas](#exemplos-de-customizações-avançadas)
+  - [1. Tema Escuro](#1-tema-escuro)
+  - [2. Responsividade Mobile](#2-responsividade-mobile)
+- [Workflow de Desenvolvimento](#workflow-de-desenvolvimento)
+  - [1. Desenvolvimento Local](#1-desenvolvimento-local)
+  - [2. Testando Alterações](#2-testando-alterações)
+  - [3. Versionamento](#3-versionamento)
+- [Referências e Documentação](#referências-e-documentação)
+- [Desenvolvendo Plugins e Customizando Metadados](#desenvolvendo-plugins-e-customizando-metadados)
+  - [Passo 1: Definindo o Campo no Esquema de Metadados](#passo-1-definindo-o-campo-no-esquema-de-metadados)
+  - [Passo 2: Tornando o Metadado Pesquisável (Indexação)](#passo-2-tornando-o-metadado-pesquisável-indexação)
+  - [Passo 3: Exibindo o Campo como Filtro (Faceta)](#passo-3-exibindo-o-campo-como-filtro-faceta)
+- [Troubleshooting](#troubleshooting)
+- [Contribuindo](#contribuindo)
+
 ## Sobre o CKAN
 
 CKAN (Comprehensive Knowledge Archive Network) é uma plataforma open-source para gerenciamento de dados que permite organizações publicar, compartilhar e gerenciar dados de forma estruturada. No contexto técnico, CKAN é construído em Python usando o framework web Pylons/Flask, PostgreSQL como banco de dados principal, Apache Solr para indexação e busca, e Redis para cache e processamento de tarefas. A arquitetura modular do CKAN permite extensibilidade através de plugins (extensões), que podem adicionar funcionalidades personalizadas, modificar a interface do usuário, integrar APIs externas ou implementar workflows específicos de dados. Cada instância CKAN organiza informações em datasets (conjuntos de dados), resources (recursos como arquivos CSV, JSON, APIs), organizations (organizações proprietárias dos dados) e groups (agrupamentos temáticos), fornecendo uma API RESTful completa para integração com sistemas externos e facilitando a criação de portais de dados abertos governamentais e corporativos.
@@ -37,13 +66,13 @@ cp .env.example .env
 
 ```bash
 # Construa as imagens de desenvolvimento
-docker compose -f docker-compose.dev.yml build
+docker compose -f docker-compose-dev.yml build
 
 # Inicie os serviços
-docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose-dev.yml up -d
 
 # Verifique se todos os containers estão rodando
-docker compose -f docker-compose.dev.yml ps
+docker compose -f docker-compose-dev.yml ps
 ```
 
 ### 4. Sobre a Extensão no Repositório
@@ -53,7 +82,7 @@ docker compose -f docker-compose.dev.yml ps
 A extensão `ckanext-seplan` está localizada no diretório `src/` do repositório e é automaticamente montada como volume no container Docker durante o desenvolvimento. 
 Esta configuração permite que todas as alterações feitas nos arquivos da extensão (CSS, templates, código Python) sejam refletidas imediatamente no ambiente CKAN sem necessidade de rebuild da imagem Docker.
 
-A estrutura do volume está configurada no `docker-compose.dev.yml`:
+A estrutura do volume está configurada no `docker-compose-dev.yml`:
 
 ```yaml
 volumes:
@@ -66,7 +95,7 @@ Isso significa que:
 - Alterações em código Python requerem apenas restart do serviço CKAN
 - Não é necessário reinstalar a extensão para cada modificação durante desenvolvimento
 
-A instalação e ativação da extensão são feitas de forma automática ao rodar o build do docker-compose.dev.yml pelo script 02_setup_seplan.sh
+A instalação e ativação da extensão são feitas de forma automática ao rodar o build do docker-compose-dev.yml pelo script 02_setup_seplan.sh
 
 ## Estrutura da Extensão ckanext-seplan
 
@@ -399,7 +428,7 @@ custom_js = Resource(
 # Os arquivos são montados como volume, então as mudanças são refletidas imediatamente
 
 # Para mudanças em Python (plugin.py), reinicie o container
-docker compose -f docker-compose.dev.yml restart ckan-dev
+docker compose -f docker-compose-dev.yml restart ckan-dev
 
 # Para mudanças em CSS/templates, apenas recarregue a página
 ```
@@ -453,4 +482,106 @@ git checkout -b feature/dark-theme
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-customizacao`)
 3. Push para a branch (`git push origin feature/nova-customizacao`)
 4. Abra um Pull Request
+
+## Desenvolvendo Plugins e Customizando Metadados
+
+Este projeto utiliza uma combinação da extensão `ckanext-scheming` e um plugin customizado (`ckanext-seplan`) para criar e gerenciar campos de metadados personalizados. Isso permite não apenas adicionar novos campos aos formulários de datasets e recursos, mas também torná-los pesquisáveis e utilizá-los como filtros (facetas) na interface de busca.
+
+O exemplo abaixo demonstra como o campo **"Períodos"** foi implementado.
+
+### Passo 1: Definindo o Campo no Esquema de Metadados
+
+A customização começa com a definição do novo campo no esquema de metadados. Este projeto usa `ckanext-scheming` para gerenciar esquemas através de arquivos YAML.
+
+O arquivo `ckan/ckan_dataset_schema.yaml` define os campos para datasets e recursos. Adicionamos `res_extra_periodo` à seção `resource_fields`:
+
+```yaml
+# Em ckan/ckan_dataset_schema.yaml
+
+resource_fields:
+  # ... outros campos de recurso
+  
+  - field_name: res_extra_periodo
+    label: Período
+    form_placeholder: Período de referência dos dados (Eg. 2025, 2020-2025)
+```
+
+- **`field_name`**: O nome interno do campo no banco de dados.
+- **`label`**: O rótulo exibido no formulário para o usuário.
+- **`form_placeholder`**: Texto de ajuda exibido dentro do campo.
+
+Com essa definição, o campo "Período" aparecerá automaticamente no formulário de edição de cada recurso.
+
+### Passo 2: Tornando o Metadado Pesquisável (Indexação)
+
+Por padrão, metadados de *recursos* não são pesquisáveis na busca principal de *datasets*. Para contornar isso, usamos a interface `IPackageController` no nosso plugin `ckanext-seplan`.
+
+O método `before_dataset_index` é executado antes de um dataset ser enviado ao motor de busca (Solr). Nós o utilizamos para "promover" o valor do campo `res_extra_periodo` do nível do recurso para o nível do dataset.
+
+```python
+# Em src/ckanext-seplan/ckanext/seplan/plugin.py
+
+class SeplanPlugin(plugins.SingletonPlugin):
+    # ... outras interfaces
+    plugins.implements(plugins.IPackageController, inherit=True) 
+
+    def before_dataset_index(self, pkg_dict: dict) -> dict:
+        """
+        Coleta os valores do campo 'res_extra_periodo' de todos os recursos
+        e os adiciona ao dicionário principal do dataset para indexação no Solr.
+        """
+        # Busca o dataset completo para ter acesso aos recursos
+        try:
+            full_pkg_dict = toolkit.get_action('package_show')(
+                data_dict={'id': pkg_dict['id']}
+            )
+            resources = full_pkg_dict.get('resources', [])
+        except toolkit.ObjectNotFound:
+            resources = []
+
+        # Coleta os valores únicos do campo 'res_extra_periodo'
+        periodo_values = []
+        for resource in resources:
+            value = resource.get('res_extra_periodo')
+            if value and value not in periodo_values:
+                periodo_values.append(value)
+        
+        # Adiciona a lista de valores ao campo do dataset que será indexado
+        if periodo_values:
+            pkg_dict['res_extra_periodo'] = periodo_values
+        
+        return pkg_dict
+```
+
+Agora, o Solr irá indexar cada dataset com uma lista dos "Períodos" associados a seus recursos, tornando-os pesquisáveis.
+
+### Passo 3: Exibindo o Campo como Filtro (Faceta)
+
+Após a indexação, podemos usar o campo como um filtro (faceta) na barra lateral da página de busca. Para isso, implementamos a interface `IFacets`.
+
+O método `dataset_facets` nos permite adicionar ou modificar os filtros exibidos.
+
+```python
+# Em src/ckanext-seplan/ckanext/seplan/plugin.py
+
+class SeplanPlugin(plugins.SingletonPlugin):
+    # ... outras interfaces
+    plugins.implements(plugins.IFacets)
+
+    def dataset_facets(self, facets_dict, package_type):
+        """
+        Adiciona e renomeia facetas na página de busca.
+        """
+        facets_dict.update({
+            'organization': 'Organizações',
+            'groups': 'Grupos',
+            'tags': 'Etiquetas',
+            'res_format': 'Formatos',
+            'license_id': 'Licenças',
+            'res_extra_periodo': 'Períodos' # Nossa nova faceta!
+        })
+        return facets_dict
+```
+
+Com isso, "Períodos" aparecerá como uma opção de filtro na interface, permitindo que os usuários refinem a busca de datasets com base nesse metadado customizado.
 

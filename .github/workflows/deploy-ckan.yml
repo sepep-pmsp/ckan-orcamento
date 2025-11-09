@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - ads
+      - master
 
 jobs: 
   build_push_acs:  
@@ -71,11 +71,15 @@ jobs:
           echo "Navigating to Docker Compose directory..."
           cd ckan-orcamento
           
+          echo "updating git repo with master branch"
+          git fetch --all
+          git reset --hard origin/master
+          
+          echo "Stopping currenct instances"
+          docker compose down
+
           echo "Pulling the latest images..."
           docker compose -f docker-compose.prod.yml pull
           
           echo "Stopping and restarting CKAN services..."
           docker compose -f docker-compose.prod.yml up -d --remove-orphans
-
-          echo "Cleaning up old Docker images..."
-          docker image prune -af

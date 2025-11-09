@@ -76,7 +76,7 @@ jobs:
           git reset --hard origin/master
           
           echo "Stopping currenct instances"
-          docker compose down
+          docker compose -f docker-compose.prod.yml down
 
           echo "Pulling the latest images..."
           docker compose -f docker-compose.prod.yml pull
